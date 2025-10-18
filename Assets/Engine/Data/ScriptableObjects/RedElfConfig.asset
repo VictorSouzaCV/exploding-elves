@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efe2f82bb360634bb9fe11502e8864d, type: 3}
   m_Name: RedElfConfig
   m_EditorClassIdentifier: 
+  _elfType: 1
   _elfBehaviour: {fileID: 5658499620501175044, guid: 4454dc10e1a91164eb68bd9e9f4cb27a,
     type: 3}
+  _spawnFrequency: 1

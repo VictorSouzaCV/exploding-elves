@@ -5,12 +5,13 @@ namespace ExplodingElves.Core
 {
     public class ElfSpawnerDomain : IDisposable
     {
+        public Action<IElfAdapter, ElfDomain> OnElfSpawned { get; set; }
         private readonly IElfSpawnerAdapter _elfSpawnerAdapter;
         private readonly IElfData _elfData;
         private float _currentTime;
         private float _lastSpawnTime;
         private float _spawnFrequency;
-        private List<ElfDomain> _elves = new List<ElfDomain>();
+
         public ElfSpawnerDomain(IElfSpawnerAdapter elfSpawnerAdapter, IElfData elfData)
         {
             _elfSpawnerAdapter = elfSpawnerAdapter;
@@ -34,8 +35,8 @@ namespace ExplodingElves.Core
         void SpawnElf()
         {
             var elfAdapter = _elfSpawnerAdapter.Spawn(_elfData.ElfAdapter);
-            var elf = new ElfDomain(elfAdapter);
-            _elves.Add(elf);
+            var elf = new ElfDomain(elfAdapter, _elfData.ElfType);
+            OnElfSpawned?.Invoke(elfAdapter, elf);
         }
 
         private void OnSpawnFrequencyChanged(float spawnFrequency)
@@ -47,10 +48,6 @@ namespace ExplodingElves.Core
         {
             _elfSpawnerAdapter.OnTick -= OnTick;
             _elfSpawnerAdapter.OnSpawnFrequencyChanged -= OnSpawnFrequencyChanged;
-            foreach (var elf in _elves)
-            {
-                elf.Dispose();
-            }
         }
     }
 }

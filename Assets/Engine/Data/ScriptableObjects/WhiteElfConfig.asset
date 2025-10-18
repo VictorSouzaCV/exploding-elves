@@ -12,5 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efe2f82bb360634bb9fe11502e8864d, type: 3}
   m_Name: WhiteElfConfig
   m_EditorClassIdentifier: 
+  _elfType: 2
   _elfBehaviour: {fileID: 5658499620501175044, guid: 9ced56d740670ba46b9a214da0676a45,
     type: 3}
+  _spawnFrequency: 1

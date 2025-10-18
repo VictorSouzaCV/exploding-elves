@@ -6,5 +6,6 @@ namespace ExplodingElves.Core
     {
         Action<IElfAdapter> OnHitElf { get; set; }
         void Move(float x, float y);
+        void Explode();
     }
 }

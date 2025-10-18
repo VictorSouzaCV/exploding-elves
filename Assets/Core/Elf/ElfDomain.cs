@@ -2,20 +2,24 @@ using System;
 
 namespace ExplodingElves.Core
 {
-    public class ElfDomain : IDisposable
+    public class ElfDomain
     {
+        public Action<IElfAdapter, IElfAdapter> OnElvesHit { get; set; }
+        public Action<IElfAdapter> OnExplode { get; set; }
+        public readonly ElfType ElfType;
         private readonly IElfAdapter _elfAdapter;
         float _currentX;
         float _currentY;
         Random _random = new Random();
 
-        public ElfDomain(IElfAdapter elfAdapter)
+        public ElfDomain(IElfAdapter elfAdapter, ElfType elfType)
         {
             _elfAdapter = elfAdapter;
-            _elfAdapter.OnTick += OnTick;
+            ElfType = elfType;
+            SubscribeToAdapter();
         
-            _currentX = _random.Next(-10, 10);
-            _currentY = _random.Next(-10, 10);
+            _currentX = _random.Next(-30, 30);
+            _currentY = _random.Next(-30, 30);
         }
 
         private void OnTick(float time)
@@ -23,9 +27,28 @@ namespace ExplodingElves.Core
             _elfAdapter.Move(_currentX, _currentY);
         }
 
-        public void Dispose()
+        private void OnHitElf(IElfAdapter other)
+        {
+            OnElvesHit?.Invoke(_elfAdapter, other);
+        }
+
+        public void Explode()
+        {
+            UnsubscribeFromAdapter();
+            OnExplode?.Invoke(_elfAdapter);
+            _elfAdapter.Explode();
+        }
+
+        private void SubscribeToAdapter()
+        {
+            _elfAdapter.OnTick += OnTick;
+            _elfAdapter.OnHitElf += OnHitElf;
+        }
+
+        private void UnsubscribeFromAdapter()
         {
             _elfAdapter.OnTick -= OnTick;
+            _elfAdapter.OnHitElf -= OnHitElf;
         }
     }
 }
