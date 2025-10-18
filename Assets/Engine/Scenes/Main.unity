@@ -122,6 +122,41 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &272660447
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 272660448}
+  m_Layer: 5
+  m_Name: ElvesContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &272660448
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 272660447}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 834040673}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &338243173
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,6 +408,7 @@ RectTransform:
   - {fileID: 2099634185}
   - {fileID: 1374585046}
   - {fileID: 1921060374}
+  - {fileID: 272660448}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -393,7 +429,7 @@ GameObject:
   - component: {fileID: 881215978}
   - component: {fileID: 881215977}
   - component: {fileID: 881215976}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -542,7 +578,7 @@ GameObject:
   - component: {fileID: 938904653}
   - component: {fileID: 938904652}
   - component: {fileID: 938904651}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -898,6 +934,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8069787762909924101, guid: c4987ec5909a55446aa9d85493ebc31f,
+        type: 3}
+      propertyPath: _spawnRoot
+      value: 
+      objectReference: {fileID: 272660448}
     - target: {fileID: 8852006580088456983, guid: c4987ec5909a55446aa9d85493ebc31f,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1012,7 +1053,7 @@ GameObject:
   - component: {fileID: 1136400414}
   - component: {fileID: 1136400413}
   - component: {fileID: 1136400412}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1276,6 +1317,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8069787762909924101, guid: 73b9390820c5a304a9aa1b56b4f5a813,
+        type: 3}
+      propertyPath: _spawnRoot
+      value: 
+      objectReference: {fileID: 272660448}
     - target: {fileID: 8852006580088456983, guid: 73b9390820c5a304a9aa1b56b4f5a813,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1322,7 +1368,7 @@ GameObject:
   - component: {fileID: 1727123604}
   - component: {fileID: 1727123603}
   - component: {fileID: 1727123602}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1586,6 +1632,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8069787762909924101, guid: 24f5dace4d5e4864c9b299d069c48b84,
+        type: 3}
+      propertyPath: _spawnRoot
+      value: 
+      objectReference: {fileID: 272660448}
     - target: {fileID: 8852006580088456983, guid: 24f5dace4d5e4864c9b299d069c48b84,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1747,6 +1798,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8069787762909924101, guid: e9891bbd7e2f022469ea7ceb32562c9e,
+        type: 3}
+      propertyPath: _spawnRoot
+      value: 
+      objectReference: {fileID: 272660448}
     - target: {fileID: 8852006580088456983, guid: e9891bbd7e2f022469ea7ceb32562c9e,
         type: 3}
       propertyPath: m_AnchorMax.x

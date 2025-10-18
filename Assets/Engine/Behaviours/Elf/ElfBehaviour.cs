@@ -10,6 +10,7 @@ namespace ExplodingElves.Engine
         public Action<IElfAdapter> OnHitElf { get; set; }
         public void Move(float x, float y)
         {
+            // TODO Move with rigidbody
             transform.position += new Vector3(x, 0, y);
         }
 

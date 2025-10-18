@@ -273,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _spawnTimerSlider: {fileID: 2384081548689048032}
+  _spawnRoot: {fileID: 0}
 --- !u!1 &5489998559490329507
 GameObject:
   m_ObjectHideFlags: 0
@@ -431,8 +432,8 @@ MonoBehaviour:
   m_FillRect: {fileID: 814108756956871025}
   m_HandleRect: {fileID: 9143495082163022622}
   m_Direction: 0
-  m_MinValue: 1
-  m_MaxValue: 60
+  m_MinValue: 0
+  m_MaxValue: 20
   m_WholeNumbers: 0
   m_Value: 1
   m_OnValueChanged:

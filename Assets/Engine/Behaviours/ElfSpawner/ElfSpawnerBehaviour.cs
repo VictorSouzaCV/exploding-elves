@@ -10,6 +10,7 @@ namespace ExplodingElves.Engine
         public Action<float> OnTick { get; set; }
         public Action<float> OnSpawnFrequencyChanged { get; set; }
         [SerializeField] private Slider _spawnTimerSlider;
+        [SerializeField] private Transform _spawnRoot;
 
         private void Start()
         {
@@ -26,9 +27,9 @@ namespace ExplodingElves.Engine
             OnSpawnFrequencyChanged?.Invoke(value);
         }
 
-        public void Spawn(IElfAdapter elf)
+        public IElfAdapter Spawn(IElfAdapter elf)
         {
-            Instantiate(elf as ElfBehaviour, transform.position, Quaternion.identity);
+            return Instantiate(elf as ElfBehaviour, transform.position, Quaternion.identity, _spawnRoot);
         }
     }
 }

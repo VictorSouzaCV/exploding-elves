@@ -7,11 +7,15 @@ namespace ExplodingElves.Core
         private readonly IElfAdapter _elfAdapter;
         float _currentX;
         float _currentY;
+        Random _random = new Random();
 
         public ElfDomain(IElfAdapter elfAdapter)
         {
             _elfAdapter = elfAdapter;
             _elfAdapter.OnTick += OnTick;
+        
+            _currentX = _random.Next(-10, 10);
+            _currentY = _random.Next(-10, 10);
         }
 
         private void OnTick(float time)
