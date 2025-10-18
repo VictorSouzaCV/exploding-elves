@@ -1,39 +1,34 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using ExplodingElves.Core;
 
 namespace ExplodingElves.Engine
 {
-    public class ElfSpawnerBehaviour : MonoBehaviour
+    public class ElfSpawnerBehaviour : MonoBehaviour, IElfSpawnerAdapter
     {
-        [SerializeField] private ElfType _elfType;
+        public Action<float> OnTick { get; set; }
+        public Action<float> OnSpawnFrequencyChanged { get; set; }
         [SerializeField] private Slider _spawnTimerSlider;
-        [SerializeField] private GameObject _elfPrefab;
-        private float _spawnTimer;
-        private float _lastSpawnTime;
 
         private void Start()
         {
-            _spawnTimer = _spawnTimerSlider.value;
-            _lastSpawnTime = Time.time;
-            _spawnTimerSlider.onValueChanged.AddListener(OnSpawnTimerChanged);
+            _spawnTimerSlider.onValueChanged.AddListener(OnSpawnFrequencyInputChanged);
         }
 
-        private void OnSpawnTimerChanged(float value)
+        void FixedUpdate()
         {
-            _spawnTimer = value;
+            OnTick?.Invoke(Time.time);
         }
 
-        private void FixedUpdate()
+        private void OnSpawnFrequencyInputChanged(float value)
         {
-            if (Time.time - _lastSpawnTime >= 1f/_spawnTimer)
-            {
-                _lastSpawnTime = Time.time;
-                var randonPosition = new Vector3(Random.Range(-10f, 10f), 0, Random.Range(-10f, 10f));
-                Instantiate(_elfPrefab, transform.position + randonPosition, Quaternion.identity);
-            }
+            OnSpawnFrequencyChanged?.Invoke(value);
+        }
+
+        public void Spawn(IElfAdapter elf)
+        {
+            Instantiate(elf as ElfBehaviour, transform.position, Quaternion.identity);
         }
     }
 }

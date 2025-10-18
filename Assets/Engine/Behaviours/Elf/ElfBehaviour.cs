@@ -1,18 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
+using ExplodingElves.Core;
 
-public class ElfBehaviour : MonoBehaviour
+namespace ExplodingElves.Engine
 {
-    // Start is called before the first frame update
-    void Start()
+    public class ElfBehaviour : MonoBehaviour, IElfAdapter
     {
-        
-    }
+        public Action<float> OnTick { get; set; }
+        public Action<IElfAdapter> OnHitElf { get; set; }
+        public void Move(float x, float y)
+        {
+            transform.position += new Vector3(x, 0, y);
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        void FixedUpdate()
+        {
+            OnTick?.Invoke(Time.time);
+        }
     }
 }

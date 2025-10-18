@@ -1,0 +1,17 @@
+{
+    "name": "ExplodingElvesEngine",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4365d395bb6343d48bbdbd943966840a",
+        "GUID:d525ad6bd40672747bde77962f1c401e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
