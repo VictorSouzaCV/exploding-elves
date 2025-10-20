@@ -10,5 +10,7 @@ namespace ExplodingElves.Engine
     {
         [SerializedDictionary]
         public SerializedDictionary<ElfType, ElfConfig> ElfConfigByType;
+        [SerializeField] private ElfBehaviour _elfBehaviour;
+        public IElfAdapter ElfAdapter => _elfBehaviour;
     }
 }

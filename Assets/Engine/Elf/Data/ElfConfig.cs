@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using AYellowpaper.SerializedCollections;
 using ExplodingElves.Core;
 
 namespace ExplodingElves.Engine
@@ -11,12 +8,15 @@ namespace ExplodingElves.Engine
     {
         [SerializeField] private Color _color;
         [SerializeField] private ElfType _elfType;
-        [SerializeField] private ElfBehaviour _elfBehaviour;
         [SerializeField] private float _spawnFrequency = 1f;
-
+        [SerializeField] private float _speed = 10f;
+        [SerializeField] private int _readyToBreedAge = 1;
+        [SerializeField] private float _breedCooldown = 1;
         public (float r, float g, float b, float a) Color => new (_color.r, _color.g, _color.b, _color.a);
-        public IElfAdapter ElfAdapter => _elfBehaviour;
         public float SpawnFrequency => _spawnFrequency;
         public ElfType ElfType => _elfType;
+        public float Speed => _speed;
+        public float ReadyToBreedAge => _readyToBreedAge;
+        public float BreedCooldown => _breedCooldown;
     }
 }

@@ -18,9 +18,8 @@ public class SceneOrchestrator : MonoBehaviour
     {
         foreach (var elfSpawner in _elfSpawnerByType)
         {
-            var elfSpawnerDomain = new ElfSpawnerDomain(elfSpawner.Value, _elvesConfig.ElfConfigByType[elfSpawner.Key]);
-            // TODO there may be a memory leak. I need to find a way to unsubscribe from the elfSpawnerDomain.OnElfSpawned event.
-            elfSpawnerDomain.OnElfSpawned += _elfHitController.AddElf;
+            var elfSpawnerDomain = new ElfSpawnerDomain(elfSpawner.Value, _elvesConfig.ElfConfigByType[elfSpawner.Key], _elvesConfig.ElfAdapter);
+            _elfHitController.AddElfSpawner(elfSpawner.Key, elfSpawnerDomain);
             _disposables.Add(elfSpawnerDomain);
         }
     }

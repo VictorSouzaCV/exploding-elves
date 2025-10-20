@@ -6,5 +6,6 @@ namespace ExplodingElves.Core
     {
         Action<float> OnSpawnFrequencyChanged { get; set; }
         IElfAdapter Spawn(IElfAdapter elf);
+        IElfAdapter Spawn(IElfAdapter elf, float x, float y);
     }
 }

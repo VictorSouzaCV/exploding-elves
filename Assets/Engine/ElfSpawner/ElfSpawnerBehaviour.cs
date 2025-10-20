@@ -8,6 +8,7 @@ namespace ExplodingElves.Engine
 {
     public class ElfSpawnerBehaviour : MonoBehaviour, IElfSpawnerAdapter
     {
+        public float CurrentTime => Time.time;
         public Action<float> OnTick { get; set; }
         public Action<float> OnSpawnFrequencyChanged { get; set; }
         [SerializeField] private Slider _spawnTimerSlider;
@@ -23,7 +24,46 @@ namespace ExplodingElves.Engine
             _spawnTimerSlider.onValueChanged.AddListener(OnSpawnFrequencyInputChanged);
         }
 
-        public void InitializePool(ElfBehaviour elfPrefab)
+        void FixedUpdate()
+        {
+            OnTick?.Invoke(Time.time);
+        }
+
+        public IElfAdapter Spawn(IElfAdapter elf)
+        {
+            if (_elfPool == null)
+            {
+                InitializePool(elf as ElfBehaviour);
+            }
+
+            var elfBehaviour = _elfPool.Get();
+            return elfBehaviour;
+        }
+
+        public IElfAdapter Spawn(IElfAdapter elf, float x, float y)
+        {
+            var elfBehaviour = Spawn(elf);
+            elfBehaviour.Move(x, y);
+            return elfBehaviour;
+        }
+
+        private void OnSpawnFrequencyInputChanged(float value)
+        {
+            OnSpawnFrequencyChanged?.Invoke(value);
+        }
+
+        private void OnElfExplode(IElfAdapter elf)
+        {
+            _elfPool.Release(elf as ElfBehaviour);
+        }
+
+        private void OnDestroy()
+        {
+            _elfPool?.Clear();
+        }
+
+        #region Object Pool
+        private void InitializePool(ElfBehaviour elfPrefab)
         {
             _elfPrefab = elfPrefab;
             _elfPool = new ObjectPool<ElfBehaviour>(
@@ -46,6 +86,7 @@ namespace ExplodingElves.Engine
 
         private void OnTakeFromPool(ElfBehaviour elf)
         {
+            Debug.Log("OnTakeFromPool");
             elf.gameObject.SetActive(true);
             elf.transform.position = transform.position;
             elf.transform.rotation = Quaternion.identity;
@@ -54,45 +95,19 @@ namespace ExplodingElves.Engine
 
         private void OnReturnToPool(ElfBehaviour elf)
         {
+            Debug.Log("OnReturnToPool");
             elf.gameObject.SetActive(false);
             elf.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             elf.OnExplode -= OnElfExplode;
         }
 
-        void FixedUpdate()
-        {
-            OnTick?.Invoke(Time.time);
-        }
-
-        private void OnSpawnFrequencyInputChanged(float value)
-        {
-            OnSpawnFrequencyChanged?.Invoke(value);
-        }
-
-        public IElfAdapter Spawn(IElfAdapter elf)
-        {
-            if (_elfPool == null)
-            {
-                InitializePool(elf as ElfBehaviour);
-            }
-
-            return _elfPool.Get();
-        }
-
-        private void OnElfExplode(IElfAdapter elf)
-        {
-            _elfPool.Release(elf as ElfBehaviour);
-        }
-
         private void DestroyPooledElf(ElfBehaviour elf)
         {
+            elf.OnExplode -= OnElfExplode;
+            Debug.Log("DestroyPooledElf");
             if (elf != null)
                 Destroy(elf.gameObject);
         }
-
-        private void OnDestroy()
-        {
-            _elfPool?.Clear();
-        }
+        #endregion
     }
 }

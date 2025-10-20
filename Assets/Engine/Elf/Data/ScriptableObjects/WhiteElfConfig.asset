@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _color: {r: 0.9433962, g: 0.93894625, b: 0.93894625, a: 1}
   _elfType: 2
-  _elfBehaviour: {fileID: 5658499620501175044, guid: 9ced56d740670ba46b9a214da0676a45,
-    type: 3}
   _spawnFrequency: 1
+  _speed: 400
+  _readyToBreedAge: 5
+  _breedCooldown: 5

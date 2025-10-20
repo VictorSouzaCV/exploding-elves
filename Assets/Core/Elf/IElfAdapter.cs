@@ -4,6 +4,8 @@ namespace ExplodingElves.Core
 {
     public interface IElfAdapter : IClockAdapter
     {
+        (float x, float y) Position { get; }
+        Action OnHitWall { get; set; }
         Action<IElfAdapter> OnHitElf { get; set; }
         void Move(float x, float y);
         void Explode();

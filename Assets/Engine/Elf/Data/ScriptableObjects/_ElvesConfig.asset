@@ -22,3 +22,5 @@ MonoBehaviour:
       Value: {fileID: 11400000, guid: b8b8d608a8e44904a9c5ec5c0a99c6a5, type: 2}
     - Key: 3
       Value: {fileID: 11400000, guid: 495eec26043f7ba4cb8b4273334bb71c, type: 2}
+  _elfBehaviour: {fileID: 6917301733138133425, guid: 7bcb334ccfcc81c42946dbf19263f301,
+    type: 3}
