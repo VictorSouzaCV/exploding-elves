@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using ExplodingElves.Core;
 
 namespace ExplodingElves.Engine
@@ -8,11 +9,19 @@ namespace ExplodingElves.Engine
     {
         public Action<float> OnTick { get; set; }
         public Action<IElfAdapter> OnHitElf { get; set; }
+        public Action<IElfAdapter> OnExplode { get; set; } 
         [SerializeField] private Rigidbody2D _rigidbody;
+        [SerializeField] private Image _image;
+
 
         public void Move(float x, float y)
         {
             _rigidbody.velocity = new Vector2(x, y);
+        }
+
+        public void SetColor((float r, float g, float b, float a) color)
+        {
+            _image.color = new Color(color.r, color.g, color.b, color.a);
         }
 
         void FixedUpdate()
@@ -30,7 +39,7 @@ namespace ExplodingElves.Engine
 
         public void Explode()
         {
-            Destroy(gameObject);
+            OnExplode?.Invoke(this);
         }
     }
 }

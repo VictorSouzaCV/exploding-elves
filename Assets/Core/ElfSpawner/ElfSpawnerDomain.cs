@@ -35,7 +35,7 @@ namespace ExplodingElves.Core
         void SpawnElf()
         {
             var elfAdapter = _elfSpawnerAdapter.Spawn(_elfData.ElfAdapter);
-            var elf = new ElfDomain(elfAdapter, _elfData.ElfType);
+            var elf = new ElfDomain(elfAdapter, _elfData);
             OnElfSpawned?.Invoke(elfAdapter, elf);
         }
 

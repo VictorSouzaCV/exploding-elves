@@ -10,7 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efe2f82bb360634bb9fe11502e8864d, type: 3}
-  m_Name: BlackElfConfig
+  m_Name: BlueElfConfig
   m_EditorClassIdentifier: 
-  _elfBehaviour: {fileID: 5658499620501175044, guid: 3893211f738071440aa06116733436ac,
+  _color: {r: 0.20425417, g: 0.27050105, b: 0.8490566, a: 1}
+  _elfType: 3
+  _elfBehaviour: {fileID: 5658499620501175044, guid: 89dfa3830dda8894c94bdd705e973e46,
     type: 3}
+  _spawnFrequency: 1

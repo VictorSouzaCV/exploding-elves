@@ -6,16 +6,20 @@ namespace ExplodingElves.Core
     {
         public Action<IElfAdapter, IElfAdapter> OnElvesHit { get; set; }
         public Action<IElfAdapter> OnExplode { get; set; }
-        public readonly ElfType ElfType;
+        public ElfType ElfType => _elfData.ElfType;
         private readonly IElfAdapter _elfAdapter;
+        private readonly IElfData _elfData;
         float _currentX;
         float _currentY;
         Random _random = new Random();
 
-        public ElfDomain(IElfAdapter elfAdapter, ElfType elfType)
+        public ElfDomain(IElfAdapter elfAdapter, IElfData elfData)
         {
             _elfAdapter = elfAdapter;
-            ElfType = elfType;
+            _elfData = elfData;
+
+            _elfAdapter.SetColor(_elfData.Color);
+
             SubscribeToAdapter();
         
             _currentX = _random.Next(-30, 30);
