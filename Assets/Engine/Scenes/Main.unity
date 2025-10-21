@@ -856,6 +856,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5800947506678972294, guid: c4987ec5909a55446aa9d85493ebc31f,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800947506678972294, guid: c4987ec5909a55446aa9d85493ebc31f,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8069787762909924101, guid: c4987ec5909a55446aa9d85493ebc31f,
         type: 3}
       propertyPath: _spawnRoot
@@ -1238,6 +1248,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800947506678972294, guid: 73b9390820c5a304a9aa1b56b4f5a813,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800947506678972294, guid: 73b9390820c5a304a9aa1b56b4f5a813,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8069787762909924101, guid: 73b9390820c5a304a9aa1b56b4f5a813,
         type: 3}
@@ -1629,6 +1649,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5800947506678972294, guid: 24f5dace4d5e4864c9b299d069c48b84,
+        type: 3}
+      propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800947506678972294, guid: 24f5dace4d5e4864c9b299d069c48b84,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8069787762909924101, guid: 24f5dace4d5e4864c9b299d069c48b84,
         type: 3}
       propertyPath: _spawnRoot
@@ -1794,6 +1824,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5800947506678972294, guid: e9891bbd7e2f022469ea7ceb32562c9e,
+        type: 3}
+      propertyPath: m_MaxValue
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8069787762909924101, guid: e9891bbd7e2f022469ea7ceb32562c9e,
         type: 3}

@@ -59,7 +59,7 @@ namespace ExplodingElves.Core
 
             elfDomain.BecomeParent();
             otherElfDomain.BecomeParent();
-            (float x, float y) newElfPosition = ((elfAdapter.Position.x - otherElfAdapter.Position.x) / 2, (elfAdapter.Position.y - otherElfAdapter.Position.y) / 2);
+            (float x, float y) newElfPosition = ((elfAdapter.Position.x + otherElfAdapter.Position.x) / 2, (elfAdapter.Position.y + otherElfAdapter.Position.y) / 2);
             _elfSpawnerByType[elfDomain.ElfType].GiveBirthToElf(newElfPosition.x, newElfPosition.y, elfAdapter, otherElfAdapter);
         }
 

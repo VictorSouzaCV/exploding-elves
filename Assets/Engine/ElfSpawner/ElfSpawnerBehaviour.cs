@@ -36,7 +36,7 @@ namespace ExplodingElves.Engine
         public IElfAdapter Spawn(IElfAdapter elf, float x, float y)
         {
             var elfBehaviour = Spawn(elf);
-            elfBehaviour.Move(x, y);
+            elfBehaviour.SetPosition(x, y);
             return elfBehaviour;
         }
 

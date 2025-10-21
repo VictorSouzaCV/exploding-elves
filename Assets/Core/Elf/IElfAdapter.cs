@@ -8,7 +8,9 @@ namespace ExplodingElves.Core
         Action OnHitWall { get; set; }
         Action<IElfAdapter> OnHitElf { get; set; }
         void Move(float x, float y);
+        void SetPosition(float x, float y);
         void Explode();
         void SetColor((float r, float g, float b, float a) color);
+        void ShowStateVisual(ElfState state);
     }
 }

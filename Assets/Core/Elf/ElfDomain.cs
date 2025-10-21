@@ -4,21 +4,15 @@ namespace ExplodingElves.Core
 {
     public class ElfDomain
     {
-        public bool CanBreed 
-        {
-            get {
-                var isOldEnough = _age >= _elfData.ReadyToBreedAge;
-                var isCooledDown = _lastBreedTime - _clockAdapter.CurrentTime >= _elfData.BreedCooldown || _lastBreedTime == default;
-                return isOldEnough && isCooledDown;
-            }
-        }
-        
+        public bool CanBreed => _isOldEnoughToBreed && !_isTiredOfBreeding;
         public Action<IElfAdapter, IElfAdapter> OnElvesHit { get; set; }
         public Action<IElfAdapter> OnExplode { get; set; }
         public ElfType ElfType => _elfData.ElfType;
         private readonly IElfAdapter _elfAdapter;
         private readonly IElfData _elfData;
         float _currentAngleVariation;
+        bool _isOldEnoughToBreed => _age >= _elfData.ReadyToBreedAge;
+        bool _isTiredOfBreeding => _clockAdapter.CurrentTime - _lastBreedTime <= _elfData.BreedCooldown;
         float _age => _bornTime == default ? 0 : _clockAdapter.CurrentTime - _bornTime;
         float _bornTime;
         float _lastBreedTime;
@@ -26,6 +20,7 @@ namespace ExplodingElves.Core
         private readonly IElfAdapter _elfParentAdapter;
         private readonly IElfAdapter _otherParentElfAdapter;
         private readonly IClockAdapter _clockAdapter;
+        private ElfState _state;
         public ElfDomain(IElfAdapter elfAdapter, IElfData elfData, IClockAdapter clockAdapter, IElfAdapter parentElfAdapter = null, IElfAdapter otherParentElfAdapter = null)
         {
             _elfAdapter = elfAdapter;
@@ -35,13 +30,22 @@ namespace ExplodingElves.Core
             _otherParentElfAdapter = otherParentElfAdapter;
 
             _elfAdapter.SetColor(_elfData.Color);
+            SetState(ElfState.Minor);
+            
             SubscribeToAdapters();
             _currentAngleVariation = (float)(_random.NextDouble() * Math.PI * 2);
             _bornTime = clockAdapter.CurrentTime;
         }
 
+        private void SetState(ElfState state)
+        {
+            _state = state;
+            _elfAdapter.ShowStateVisual(state);
+        }
+
         private void OnTick(float time)
         {
+            CalculateState();
             float angularVariation = (float)((_random.NextDouble() - 0.5) * 0.3);
             _currentAngleVariation += angularVariation;
 
@@ -49,6 +53,25 @@ namespace ExplodingElves.Core
             float currentY = (float)Math.Sin(_currentAngleVariation);
 
             _elfAdapter.Move(currentX * _elfData.Speed, currentY * _elfData.Speed);
+        }
+
+        private void CalculateState()
+        {
+            switch (_state)
+            {
+                case ElfState.Minor:
+                    if (_isOldEnoughToBreed)
+                    {
+                        SetState(ElfState.GrownUp);
+                    }
+                    break;
+                case ElfState.TiredOfBreeding:
+                    if (!_isTiredOfBreeding)
+                    {
+                        SetState(ElfState.GrownUp);
+                    }
+                    break;
+            }
         }
 
         private void OnHitElf(IElfAdapter other)
@@ -69,6 +92,7 @@ namespace ExplodingElves.Core
         public void BecomeParent()
         {
             _lastBreedTime = _clockAdapter.CurrentTime;
+            SetState(ElfState.TiredOfBreeding);
         }
 
         public void Explode()

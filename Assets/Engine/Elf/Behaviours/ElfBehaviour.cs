@@ -12,7 +12,9 @@ namespace ExplodingElves.Engine
         public Action<IElfAdapter> OnExplode { get; set; } 
         public Action OnHitWall { get; set; }
         [SerializeField] private Rigidbody2D _rigidbody;
-        [SerializeField] private Image _image;
+        [SerializeField] private Image _minorElf;
+        [SerializeField] private Image _grownUpElf;
+        [SerializeField] private Image _tiredImage;
         [SerializeField] private Sprite _normalSprite;
         [SerializeField] private Sprite _explosionSprite;
 
@@ -24,12 +26,18 @@ namespace ExplodingElves.Engine
             _rigidbody.velocity = new Vector2(x, y);
         }
 
-        public void SetColor((float r, float g, float b, float a) color)
+        public void SetPosition(float x, float y)
         {
-            _image.color = new Color(color.r, color.g, color.b, color.a);
+            transform.position = new Vector2(x, y);
         }
 
-        void OnCollisionEnter2D(Collision2D collision)
+        public void SetColor((float r, float g, float b, float a) color)
+        {
+            _minorElf.color = new Color(color.r, color.g, color.b, color.a);
+            _grownUpElf.color = new Color(color.r, color.g, color.b, color.a);
+        }
+
+        void OnCollisionStay2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Elf"))
             {
@@ -47,11 +55,36 @@ namespace ExplodingElves.Engine
             StartCoroutine(ExplodeCoroutine());
         }
 
+        private void HideAllStateVisuals()
+        {
+            _minorElf.enabled = false;
+            _grownUpElf.enabled = false;
+            _tiredImage.enabled = false;
+        }
+
+        public void ShowStateVisual(ElfState state)
+        {
+            HideAllStateVisuals();
+            switch (state)
+            {
+                case ElfState.Minor:
+                    _minorElf.enabled = true;
+                    break;            
+                case ElfState.GrownUp:
+                    _grownUpElf.enabled = true;
+                    break;
+                case ElfState.TiredOfBreeding:
+                    _grownUpElf.enabled = true;
+                    _tiredImage.enabled = true;
+                    break;
+            }
+        }
+
         private IEnumerator ExplodeCoroutine()
         {
-            _image.sprite = _explosionSprite;
+            _grownUpElf.sprite = _explosionSprite;
             yield return _explosionDuration;
-            _image.sprite = _normalSprite;
+            _grownUpElf.sprite = _normalSprite;
             OnExplode?.Invoke(this);
         }
     }
