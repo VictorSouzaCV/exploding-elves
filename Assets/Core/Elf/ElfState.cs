@@ -3,7 +3,8 @@ namespace ExplodingElves.Core
     public enum ElfState
     {
         Minor,
-        GrownUp,
+        ReadyToBreed,
         TiredOfBreeding,
+        Exploded,
     }
 }

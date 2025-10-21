@@ -10,17 +10,18 @@ namespace ExplodingElves.Core
         private readonly IElfData _elfData;
         private readonly IElfAdapter _elfAdapter;
         private readonly IClockAdapter _clockAdapter;
-        private float _currentTime;
         private float _lastSpawnTime;
         private float _spawnFrequency;
-
-        public ElfSpawnerDomain(IElfSpawnerAdapter elfSpawnerAdapter, IElfData elfData, IElfAdapter elfAdapter, IClockAdapter clockAdapter)
+        private float _startAngularVariation;
+        public ElfSpawnerDomain(IElfSpawnerAdapter elfSpawnerAdapter, IElfData elfData, IElfAdapter elfAdapter, IClockAdapter clockAdapter, float startAngularVariation)
         {
             _elfSpawnerAdapter = elfSpawnerAdapter;
             _elfData = elfData;
             _elfAdapter = elfAdapter;
             _spawnFrequency = _elfData.SpawnFrequency;
             _clockAdapter = clockAdapter;
+            _startAngularVariation = startAngularVariation;
+            _elfSpawnerAdapter.SetColor(_elfData.Color);
 
             _clockAdapter.OnTick += OnTick;
             _elfSpawnerAdapter.OnSpawnFrequencyChanged += OnSpawnFrequencyChanged;
@@ -28,28 +29,27 @@ namespace ExplodingElves.Core
 
         private void OnTick(float time)
         {
-            _currentTime = time;
-            if (_currentTime - _lastSpawnTime >= 1f / _spawnFrequency)
+            if (_clockAdapter.CurrentTime - _lastSpawnTime >= 1f / _spawnFrequency)
             {
-                _lastSpawnTime = _currentTime;
+                _lastSpawnTime = _clockAdapter.CurrentTime;
                 SpawnElf();
             }
         }
 
-        public void SpawnElf()
+        public ElfDomain SpawnElf()
         {
             var elfAdapter = _elfSpawnerAdapter.Spawn(_elfAdapter);
-            var elf = new ElfDomain(elfAdapter, _elfData, _clockAdapter);
+            var elf = new ElfDomain(elfAdapter, _elfData, _clockAdapter, _startAngularVariation);
             elf.OnExplode += OnElfDespawned;
             OnElfSpawned?.Invoke(elfAdapter, elf);
+            return elf;
         }
 
-        public void GiveBirthToElf(float x, float y, IElfAdapter elfParentAdapter, IElfAdapter otherElfParentAdapter)
+        public ElfDomain SpawnElf(float x, float y)
         {
-            var elfAdapter = _elfSpawnerAdapter.Spawn(_elfAdapter, x, y);
-            var elf = new ElfDomain(elfAdapter, _elfData, _clockAdapter, elfParentAdapter, otherElfParentAdapter);
-            elf.OnExplode += OnElfDespawned;
-            OnElfSpawned?.Invoke(elfAdapter, elf);
+            var elf = SpawnElf();
+            elf.SetPosition(x, y);
+            return elf;
         }
 
         private void OnSpawnFrequencyChanged(float spawnFrequency)

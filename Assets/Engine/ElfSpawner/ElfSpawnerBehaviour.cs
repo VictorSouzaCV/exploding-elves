@@ -11,8 +11,9 @@ namespace ExplodingElves.Engine
         public Action<float> OnSpawnFrequencyChanged { get; set; }
         [SerializeField] private Slider _spawnTimerSlider;
         [SerializeField] private Transform _spawnRoot;
-        [SerializeField] private int _poolDefaultCapacity = 10;
-        [SerializeField] private int _poolMaxCapacity = 100;
+        [SerializeField] private int _poolDefaultCapacity = 50;
+        [SerializeField] private int _poolMaxCapacity = 1000;
+        [SerializeField] private Image _spawnerImage;
 
         private ObjectPool<ElfBehaviour> _elfPool;
         private ElfBehaviour _elfPrefab;
@@ -20,6 +21,11 @@ namespace ExplodingElves.Engine
         private void Start()
         {
             _spawnTimerSlider.onValueChanged.AddListener(OnSpawnFrequencyInputChanged);
+        }
+
+        public void SetColor((float r, float g, float b, float a) color)
+        {
+            _spawnerImage.color = new Color(color.r, color.g, color.b, color.a);
         }
 
         public IElfAdapter Spawn(IElfAdapter elf)
@@ -30,13 +36,6 @@ namespace ExplodingElves.Engine
             }
 
             var elfBehaviour = _elfPool.Get();
-            return elfBehaviour;
-        }
-
-        public IElfAdapter Spawn(IElfAdapter elf, float x, float y)
-        {
-            var elfBehaviour = Spawn(elf);
-            elfBehaviour.SetPosition(x, y);
             return elfBehaviour;
         }
 
@@ -72,14 +71,13 @@ namespace ExplodingElves.Engine
 
         private ElfBehaviour CreatePooledElf()
         {
-            var elf = Instantiate(_elfPrefab, _spawnRoot);
+            var elf = Instantiate(_elfPrefab, transform.position, Quaternion.identity, _spawnRoot);
             elf.gameObject.SetActive(false);
             return elf;
         }
 
         private void OnTakeFromPool(ElfBehaviour elf)
         {
-            Debug.Log("OnTakeFromPool");
             elf.gameObject.SetActive(true);
             elf.transform.position = transform.position;
             elf.transform.rotation = Quaternion.identity;

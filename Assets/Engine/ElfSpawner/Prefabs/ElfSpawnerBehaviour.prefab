@@ -276,6 +276,7 @@ MonoBehaviour:
   _spawnRoot: {fileID: 0}
   _poolDefaultCapacity: 10
   _poolMaxCapacity: 100
+  _spawnerImage: {fileID: 7003813948640181397}
 --- !u!1 &5489998559490329507
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,5 +16,6 @@ MonoBehaviour:
   _elfType: 1
   _spawnFrequency: 1
   _speed: 400
-  _readyToBreedAge: 5
-  _breedCooldown: 10
+  _readyToBreedAge: 3
+  _breedCooldown: 5
+  _wanderFactor: 0.5

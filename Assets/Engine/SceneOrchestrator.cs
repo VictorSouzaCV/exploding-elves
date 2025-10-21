@@ -11,7 +11,7 @@ public class SceneOrchestrator : MonoBehaviour, IClockAdapter
     public Action<float> OnTick { get; set; }
     [SerializeField] private ElvesConfig _elvesConfig;
 
-    [SerializeField, SerializedDictionary] private SerializedDictionary<ElfType, ElfSpawnerBehaviour> _elfSpawnerByType;
+    [SerializeField, SerializedDictionary] private SerializedDictionary<ElfType, SpawnerConfig> _elfSpawnerByType;
     List<IDisposable> _disposables = new List<IDisposable>();
     ElfHitController _elfHitController = new ElfHitController();
 
@@ -19,7 +19,7 @@ public class SceneOrchestrator : MonoBehaviour, IClockAdapter
     {
         foreach (var elfSpawner in _elfSpawnerByType)
         {
-            var elfSpawnerDomain = new ElfSpawnerDomain(elfSpawner.Value, _elvesConfig.ElfConfigByType[elfSpawner.Key], _elvesConfig.ElfAdapter, this);
+            var elfSpawnerDomain = new ElfSpawnerDomain(elfSpawner.Value.Behaviour, _elvesConfig.ElfConfigByType[elfSpawner.Key], _elvesConfig.ElfAdapter, this, elfSpawner.Value.StartAngularVariation);
             _elfHitController.AddElfSpawner(elfSpawner.Key, elfSpawnerDomain);
             _disposables.Add(elfSpawnerDomain);
         }
@@ -36,5 +36,12 @@ public class SceneOrchestrator : MonoBehaviour, IClockAdapter
         {
             disposable.Dispose();
         }
+    }
+
+    [Serializable]
+    struct SpawnerConfig
+    {
+        public ElfSpawnerBehaviour Behaviour;
+        public float StartAngularVariation;
     }
 }

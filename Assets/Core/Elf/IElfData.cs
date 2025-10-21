@@ -8,5 +8,6 @@ namespace ExplodingElves.Core
         float Speed { get; }
         float ReadyToBreedAge { get; }
         float BreedCooldown { get; }
+        float WanderFactor { get; }
     }
 }

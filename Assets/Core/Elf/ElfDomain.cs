@@ -5,54 +5,94 @@ namespace ExplodingElves.Core
     public class ElfDomain
     {
         public bool CanBreed => _isOldEnoughToBreed && !_isTiredOfBreeding;
+        public bool CanExplode => _state != ElfState.Exploded;
         public Action<IElfAdapter, IElfAdapter> OnElvesHit { get; set; }
         public Action<IElfAdapter> OnExplode { get; set; }
         public ElfType ElfType => _elfData.ElfType;
         private readonly IElfAdapter _elfAdapter;
         private readonly IElfData _elfData;
-        float _currentAngleVariation;
-        bool _isOldEnoughToBreed => _age >= _elfData.ReadyToBreedAge;
-        bool _isTiredOfBreeding => _clockAdapter.CurrentTime - _lastBreedTime <= _elfData.BreedCooldown;
-        float _age => _bornTime == default ? 0 : _clockAdapter.CurrentTime - _bornTime;
-        float _bornTime;
-        float _lastBreedTime;
-        Random _random = new Random();
-        private readonly IElfAdapter _elfParentAdapter;
-        private readonly IElfAdapter _otherParentElfAdapter;
         private readonly IClockAdapter _clockAdapter;
+        private float _currentAngleVariation;
+        private float _currentMovementX;
+        private float _currentMovementY;
+        private bool _isOldEnoughToBreed => _age >= _elfData.ReadyToBreedAge;
+        private bool _isTiredOfBreeding => _clockAdapter.CurrentTime - _lastBreedTime <= _elfData.BreedCooldown;
+        private float _age => _bornTime == default ? 0 : _clockAdapter.CurrentTime - _bornTime;
+        private float _bornTime;
+        private float _lastBreedTime;
+        private Random _random = new Random();
         private ElfState _state;
-        public ElfDomain(IElfAdapter elfAdapter, IElfData elfData, IClockAdapter clockAdapter, IElfAdapter parentElfAdapter = null, IElfAdapter otherParentElfAdapter = null)
+
+        public ElfDomain(IElfAdapter elfAdapter, IElfData elfData, IClockAdapter clockAdapter, float startAngularVariation)
         {
             _elfAdapter = elfAdapter;
             _elfData = elfData;
             _clockAdapter = clockAdapter;
-            _elfParentAdapter = parentElfAdapter;
-            _otherParentElfAdapter = otherParentElfAdapter;
 
             _elfAdapter.SetColor(_elfData.Color);
-            SetState(ElfState.Minor);
+            _currentAngleVariation = startAngularVariation;
             
+            ChangeState(ElfState.Minor);
             SubscribeToAdapters();
-            _currentAngleVariation = (float)(_random.NextDouble() * Math.PI * 2);
-            _bornTime = clockAdapter.CurrentTime;
         }
 
-        private void SetState(ElfState state)
+        public void BecomeParent()
+        {
+            ChangeState(ElfState.TiredOfBreeding);
+        }
+
+        public void Explode()
+        {
+            UnsubscribeFromAdapters();
+            ChangeState(ElfState.Exploded);
+        }
+
+        public void SetPosition(float x, float y)
+        {
+            _elfAdapter.SetPosition(x, y);
+        }
+
+        private void OnUpdate(float deltaTime)
+        {
+            HandleState();
+            CalculateState();
+        }
+
+        private void ChangeState(ElfState state)
         {
             _state = state;
-            _elfAdapter.ShowStateVisual(state);
+            switch (_state)
+            {
+                case ElfState.Minor:
+                    _bornTime = _clockAdapter.CurrentTime;
+                    break;
+                case ElfState.ReadyToBreed:
+                    break;
+                case ElfState.TiredOfBreeding:
+                    _lastBreedTime = _clockAdapter.CurrentTime;
+                    break;
+                case ElfState.Exploded:
+                    _lastBreedTime = 0;
+                    _bornTime = 0;
+                    _elfAdapter.ChangeMovement(0, 0);
+                    OnExplode?.Invoke(_elfAdapter);
+                    break;
+            }
+            _elfAdapter.ShowStateVisualChange(_state);
         }
 
-        private void OnTick(float time)
+        private void HandleState()
         {
-            CalculateState();
-            float angularVariation = (float)((_random.NextDouble() - 0.5) * 0.3);
-            _currentAngleVariation += angularVariation;
-
-            float currentX = (float)Math.Cos(_currentAngleVariation);
-            float currentY = (float)Math.Sin(_currentAngleVariation);
-
-            _elfAdapter.Move(currentX * _elfData.Speed, currentY * _elfData.Speed);
+            switch (_state)
+            {
+                case ElfState.Exploded:
+                    break;
+                case ElfState.Minor:
+                case ElfState.ReadyToBreed:
+                case ElfState.TiredOfBreeding:
+                    Move();
+                    break;
+            }
         }
 
         private void CalculateState()
@@ -62,61 +102,44 @@ namespace ExplodingElves.Core
                 case ElfState.Minor:
                     if (_isOldEnoughToBreed)
                     {
-                        SetState(ElfState.GrownUp);
+                        ChangeState(ElfState.ReadyToBreed);
                     }
                     break;
                 case ElfState.TiredOfBreeding:
                     if (!_isTiredOfBreeding)
                     {
-                        SetState(ElfState.GrownUp);
+                        ChangeState(ElfState.ReadyToBreed);
                     }
                     break;
             }
         }
 
+        private void Move()
+        {
+            float angularVariation = (float)((_random.NextDouble() - 0.5) * _elfData.WanderFactor);
+            _currentAngleVariation += angularVariation;
+
+            _currentMovementX = (float)Math.Cos(_currentAngleVariation) * _elfData.Speed;
+            _currentMovementY = (float)Math.Sin(_currentAngleVariation) * _elfData.Speed;
+
+            _elfAdapter.ChangeMovement(_currentMovementX, _currentMovementY);
+        }
+
         private void OnHitElf(IElfAdapter other)
         {
-            if (_elfParentAdapter == other || _otherParentElfAdapter == other)
-            {
-                return;
-            }
-
             OnElvesHit?.Invoke(_elfAdapter, other);
-        }
-
-        private void OnHitWall()
-        {
-            _currentAngleVariation = (float)(_currentAngleVariation + Math.PI);
-        }
-
-        public void BecomeParent()
-        {
-            _lastBreedTime = _clockAdapter.CurrentTime;
-            SetState(ElfState.TiredOfBreeding);
-        }
-
-        public void Explode()
-        {
-            UnsubscribeFromAdapters();
-            OnExplode?.Invoke(_elfAdapter);
-            _elfAdapter.Move(0, 0);
-            _elfAdapter.Explode();
-            _lastBreedTime = default;
-            _bornTime = default;
         }
 
         private void SubscribeToAdapters()
         {
             _elfAdapter.OnHitElf += OnHitElf;
-            _elfAdapter.OnHitWall += OnHitWall;
-            _clockAdapter.OnTick += OnTick;
+            _clockAdapter.OnTick += OnUpdate;
         }
 
         private void UnsubscribeFromAdapters()
         {
-            _clockAdapter.OnTick -= OnTick;
+            _clockAdapter.OnTick -= OnUpdate;
             _elfAdapter.OnHitElf -= OnHitElf;
-            _elfAdapter.OnHitWall -= OnHitWall;
         }
     }
 }

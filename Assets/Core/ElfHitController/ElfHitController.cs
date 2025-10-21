@@ -13,67 +13,54 @@ namespace ExplodingElves.Core
             elfSpawner.OnElfSpawned += AddElf;
         }
 
-        public void AddElf(IElfAdapter elfAdapter, ElfDomain elfDomain)
+        private void AddElf(IElfAdapter elfAdapter, ElfDomain elfDomain)
         {
             _elves.Add(elfAdapter, elfDomain);
             elfDomain.OnElvesHit += OnElvesHit;
-            elfDomain.OnExplode += OnElfExplode;
-        }
-
-        private void OnElvesHit(IElfAdapter self, IElfAdapter other)
-        {
-            ElfDomain elfDomain = null;
-            ElfDomain otherElfDomain = null;
-            try {
-                elfDomain = _elves[self];
-                otherElfDomain = _elves[other];
-            } catch (KeyNotFoundException) {
-            
-                return;
-            }
-
-            if (elfDomain.ElfType != otherElfDomain.ElfType)
-            {
-                HandleOppositeElvesHit(elfDomain, otherElfDomain, self, other);
-            } 
-            else 
-            {
-                HandleSameElvesHit(elfDomain, otherElfDomain, self, other);
-            }
-        }
-
-        void HandleOppositeElvesHit(ElfDomain elfDomain, ElfDomain otherElfDomain, IElfAdapter elfAdapter, IElfAdapter otherElfAdapter)
-        {
-            RemoveElf(elfAdapter);
-            RemoveElf(otherElfAdapter);
-            elfDomain.Explode();
-            otherElfDomain.Explode();
-        }
-
-        void HandleSameElvesHit(ElfDomain elfDomain, ElfDomain otherElfDomain, IElfAdapter elfAdapter, IElfAdapter otherElfAdapter)
-        {
-            if (!elfDomain.CanBreed || !otherElfDomain.CanBreed)
-            {
-                return;
-            }
-
-            elfDomain.BecomeParent();
-            otherElfDomain.BecomeParent();
-            (float x, float y) newElfPosition = ((elfAdapter.Position.x + otherElfAdapter.Position.x) / 2, (elfAdapter.Position.y + otherElfAdapter.Position.y) / 2);
-            _elfSpawnerByType[elfDomain.ElfType].GiveBirthToElf(newElfPosition.x, newElfPosition.y, elfAdapter, otherElfAdapter);
-        }
-
-        private void OnElfExplode(IElfAdapter elfAdapter)
-        {
-            RemoveElf(elfAdapter);
         }
 
         private void RemoveElf(IElfAdapter elfAdapter)
         {
-            if (_elves.ContainsKey(elfAdapter))
-            {
-                _elves.Remove(elfAdapter);
+            var elfDomain = _elves[elfAdapter];
+            elfDomain.OnElvesHit -= OnElvesHit;
+            _elves.Remove(elfAdapter);
+        }
+
+        private void OnElvesHit(IElfAdapter self, IElfAdapter other)
+        {
+            ElfDomain elfDomain;
+            ElfDomain otherElfDomain;
+            try {
+                elfDomain = _elves[self];
+                otherElfDomain = _elves[other];
+            } catch (KeyNotFoundException) {
+                //Expected to happen when elves are exploding
+                return;
             }
+            if (elfDomain.ElfType != otherElfDomain.ElfType && elfDomain.CanExplode && otherElfDomain.CanExplode)
+            {
+                ExplodeElves(elfDomain, otherElfDomain, self, other);
+            } 
+            else if (elfDomain.CanBreed && otherElfDomain.CanBreed)
+            {
+                CreateElvesFamily(elfDomain, otherElfDomain, self, other);
+            }
+        }
+
+        void ExplodeElves(ElfDomain elfDomain, ElfDomain otherElfDomain, IElfAdapter elfAdapter, IElfAdapter otherElfAdapter)
+        {
+            elfDomain.Explode();
+            otherElfDomain.Explode();
+            RemoveElf(elfAdapter);
+            RemoveElf(otherElfAdapter);
+        }
+
+        void CreateElvesFamily(ElfDomain elfDomain, ElfDomain otherElfDomain, IElfAdapter elfAdapter, IElfAdapter otherElfAdapter)
+        {
+            elfDomain.BecomeParent();
+            otherElfDomain.BecomeParent();
+            (float x, float y) newElfPosition = ((elfAdapter.Position.x + otherElfAdapter.Position.x) / 2, (elfAdapter.Position.y + otherElfAdapter.Position.y) / 2);
+            _elfSpawnerByType[elfDomain.ElfType].SpawnElf(newElfPosition.x, newElfPosition.y);
         }
     }
 }
