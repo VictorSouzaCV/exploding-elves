@@ -8,8 +8,6 @@ namespace ExplodingElves.Engine
 {
     public class ElfSpawnerBehaviour : MonoBehaviour, IElfSpawnerAdapter
     {
-        public float CurrentTime => Time.time;
-        public Action<float> OnTick { get; set; }
         public Action<float> OnSpawnFrequencyChanged { get; set; }
         [SerializeField] private Slider _spawnTimerSlider;
         [SerializeField] private Transform _spawnRoot;
@@ -22,11 +20,6 @@ namespace ExplodingElves.Engine
         private void Start()
         {
             _spawnTimerSlider.onValueChanged.AddListener(OnSpawnFrequencyInputChanged);
-        }
-
-        void FixedUpdate()
-        {
-            OnTick?.Invoke(Time.time);
         }
 
         public IElfAdapter Spawn(IElfAdapter elf)
@@ -95,16 +88,13 @@ namespace ExplodingElves.Engine
 
         private void OnReturnToPool(ElfBehaviour elf)
         {
-            Debug.Log("OnReturnToPool");
             elf.gameObject.SetActive(false);
-            elf.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
             elf.OnExplode -= OnElfExplode;
         }
 
         private void DestroyPooledElf(ElfBehaviour elf)
         {
             elf.OnExplode -= OnElfExplode;
-            Debug.Log("DestroyPooledElf");
             if (elf != null)
                 Destroy(elf.gameObject);
         }

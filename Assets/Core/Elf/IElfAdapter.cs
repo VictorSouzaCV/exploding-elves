@@ -2,7 +2,7 @@ using System;
 
 namespace ExplodingElves.Core
 {
-    public interface IElfAdapter : IClockAdapter
+    public interface IElfAdapter
     {
         (float x, float y) Position { get; }
         Action OnHitWall { get; set; }

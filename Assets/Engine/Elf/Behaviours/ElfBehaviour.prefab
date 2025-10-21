@@ -53,6 +53,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 5787760372937795573}
   _image: {fileID: 7050469937985666617}
+  _normalSprite: {fileID: 21300000, guid: b35e5590228c4dd44925cf6e5bd26cd2, type: 3}
+  _explosionSprite: {fileID: 21300000, guid: 83c315b13cb075d4daddf4fa31ec4903, type: 3}
 --- !u!50 &5787760372937795573
 Rigidbody2D:
   serializedVersion: 4
@@ -69,7 +71,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: fcfffbf749e52084ebb68f948c11f8b7, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

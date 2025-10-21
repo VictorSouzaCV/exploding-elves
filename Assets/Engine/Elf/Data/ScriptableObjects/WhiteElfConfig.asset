@@ -17,4 +17,4 @@ MonoBehaviour:
   _spawnFrequency: 1
   _speed: 400
   _readyToBreedAge: 5
-  _breedCooldown: 5
+  _breedCooldown: 10

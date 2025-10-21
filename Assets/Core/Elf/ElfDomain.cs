@@ -8,7 +8,7 @@ namespace ExplodingElves.Core
         {
             get {
                 var isOldEnough = _age >= _elfData.ReadyToBreedAge;
-                var isCooledDown = _lastBreedTick >= _elfData.BreedCooldown || _lastBreedTick == default;
+                var isCooledDown = _lastBreedTime - _clockAdapter.CurrentTime >= _elfData.BreedCooldown || _lastBreedTime == default;
                 return isOldEnough && isCooledDown;
             }
         }
@@ -19,37 +19,29 @@ namespace ExplodingElves.Core
         private readonly IElfAdapter _elfAdapter;
         private readonly IElfData _elfData;
         float _currentAngleVariation;
-        float _age => _currentTick - _bornTick;
-        float _currentTick;
-        float _bornTick;
-        float _lastBreedTick;
+        float _age => _bornTime == default ? 0 : _clockAdapter.CurrentTime - _bornTime;
+        float _bornTime;
+        float _lastBreedTime;
         Random _random = new Random();
         private readonly IElfAdapter _elfParentAdapter;
         private readonly IElfAdapter _otherParentElfAdapter;
-
-        public ElfDomain(IElfAdapter elfAdapter, IElfData elfData, IElfAdapter parentElfAdapter = null, IElfAdapter otherParentElfAdapter = null)
+        private readonly IClockAdapter _clockAdapter;
+        public ElfDomain(IElfAdapter elfAdapter, IElfData elfData, IClockAdapter clockAdapter, IElfAdapter parentElfAdapter = null, IElfAdapter otherParentElfAdapter = null)
         {
             _elfAdapter = elfAdapter;
             _elfData = elfData;
+            _clockAdapter = clockAdapter;
             _elfParentAdapter = parentElfAdapter;
             _otherParentElfAdapter = otherParentElfAdapter;
 
             _elfAdapter.SetColor(_elfData.Color);
-
-            SubscribeToAdapter();
-
+            SubscribeToAdapters();
             _currentAngleVariation = (float)(_random.NextDouble() * Math.PI * 2);
+            _bornTime = clockAdapter.CurrentTime;
         }
 
         private void OnTick(float time)
         {
-            if (_bornTick == default)
-            {
-                _bornTick = time;
-            }
-
-            _currentTick = time;
-
             float angularVariation = (float)((_random.NextDouble() - 0.5) * 0.3);
             _currentAngleVariation += angularVariation;
 
@@ -76,30 +68,29 @@ namespace ExplodingElves.Core
 
         public void BecomeParent()
         {
-            _lastBreedTick = _elfAdapter.CurrentTime;
+            _lastBreedTime = _clockAdapter.CurrentTime;
         }
 
         public void Explode()
         {
-            UnsubscribeFromAdapter();
+            UnsubscribeFromAdapters();
             OnExplode?.Invoke(_elfAdapter);
             _elfAdapter.Move(0, 0);
             _elfAdapter.Explode();
-            _lastBreedTick = default;
-            _bornTick = default;
-            _currentTick = default;
+            _lastBreedTime = default;
+            _bornTime = default;
         }
 
-        private void SubscribeToAdapter()
+        private void SubscribeToAdapters()
         {
-            _elfAdapter.OnTick += OnTick;
             _elfAdapter.OnHitElf += OnHitElf;
             _elfAdapter.OnHitWall += OnHitWall;
+            _clockAdapter.OnTick += OnTick;
         }
 
-        private void UnsubscribeFromAdapter()
+        private void UnsubscribeFromAdapters()
         {
-            _elfAdapter.OnTick -= OnTick;
+            _clockAdapter.OnTick -= OnTick;
             _elfAdapter.OnHitElf -= OnHitElf;
             _elfAdapter.OnHitWall -= OnHitWall;
         }

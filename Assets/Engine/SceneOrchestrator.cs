@@ -1,13 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AYellowpaper.SerializedCollections;
 using ExplodingElves.Core;
 using ExplodingElves.Engine;
 
-public class SceneOrchestrator : MonoBehaviour
+public class SceneOrchestrator : MonoBehaviour, IClockAdapter
 {
+    public float CurrentTime => Time.time;
+    public Action<float> OnTick { get; set; }
     [SerializeField] private ElvesConfig _elvesConfig;
 
     [SerializeField, SerializedDictionary] private SerializedDictionary<ElfType, ElfSpawnerBehaviour> _elfSpawnerByType;
@@ -18,10 +19,15 @@ public class SceneOrchestrator : MonoBehaviour
     {
         foreach (var elfSpawner in _elfSpawnerByType)
         {
-            var elfSpawnerDomain = new ElfSpawnerDomain(elfSpawner.Value, _elvesConfig.ElfConfigByType[elfSpawner.Key], _elvesConfig.ElfAdapter);
+            var elfSpawnerDomain = new ElfSpawnerDomain(elfSpawner.Value, _elvesConfig.ElfConfigByType[elfSpawner.Key], _elvesConfig.ElfAdapter, this);
             _elfHitController.AddElfSpawner(elfSpawner.Key, elfSpawnerDomain);
             _disposables.Add(elfSpawnerDomain);
         }
+    }
+
+    void FixedUpdate()
+    {
+        OnTick?.Invoke(Time.time);
     }
 
     private void OnDestroy()

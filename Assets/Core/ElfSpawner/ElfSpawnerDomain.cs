@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 
 namespace ExplodingElves.Core
 {
@@ -10,18 +9,20 @@ namespace ExplodingElves.Core
         private readonly IElfSpawnerAdapter _elfSpawnerAdapter;
         private readonly IElfData _elfData;
         private readonly IElfAdapter _elfAdapter;
+        private readonly IClockAdapter _clockAdapter;
         private float _currentTime;
         private float _lastSpawnTime;
         private float _spawnFrequency;
 
-        public ElfSpawnerDomain(IElfSpawnerAdapter elfSpawnerAdapter, IElfData elfData, IElfAdapter elfAdapter)
+        public ElfSpawnerDomain(IElfSpawnerAdapter elfSpawnerAdapter, IElfData elfData, IElfAdapter elfAdapter, IClockAdapter clockAdapter)
         {
             _elfSpawnerAdapter = elfSpawnerAdapter;
             _elfData = elfData;
             _elfAdapter = elfAdapter;
             _spawnFrequency = _elfData.SpawnFrequency;
+            _clockAdapter = clockAdapter;
 
-            _elfSpawnerAdapter.OnTick += OnTick;
+            _clockAdapter.OnTick += OnTick;
             _elfSpawnerAdapter.OnSpawnFrequencyChanged += OnSpawnFrequencyChanged;
         }
 
@@ -38,7 +39,7 @@ namespace ExplodingElves.Core
         public void SpawnElf()
         {
             var elfAdapter = _elfSpawnerAdapter.Spawn(_elfAdapter);
-            var elf = new ElfDomain(elfAdapter, _elfData);
+            var elf = new ElfDomain(elfAdapter, _elfData, _clockAdapter);
             elf.OnExplode += OnElfDespawned;
             OnElfSpawned?.Invoke(elfAdapter, elf);
         }
@@ -46,7 +47,7 @@ namespace ExplodingElves.Core
         public void GiveBirthToElf(float x, float y, IElfAdapter elfParentAdapter, IElfAdapter otherElfParentAdapter)
         {
             var elfAdapter = _elfSpawnerAdapter.Spawn(_elfAdapter, x, y);
-            var elf = new ElfDomain(elfAdapter, _elfData, elfParentAdapter, otherElfParentAdapter);
+            var elf = new ElfDomain(elfAdapter, _elfData, _clockAdapter, elfParentAdapter, otherElfParentAdapter);
             elf.OnExplode += OnElfDespawned;
             OnElfSpawned?.Invoke(elfAdapter, elf);
         }
@@ -58,7 +59,7 @@ namespace ExplodingElves.Core
 
         public void Dispose()
         {
-            _elfSpawnerAdapter.OnTick -= OnTick;
+            _clockAdapter.OnTick -= OnTick;
             _elfSpawnerAdapter.OnSpawnFrequencyChanged -= OnSpawnFrequencyChanged;
         }
     }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using ExplodingElves.Core;
@@ -7,15 +8,16 @@ namespace ExplodingElves.Engine
 {
     public class ElfBehaviour : MonoBehaviour, IElfAdapter
     {
-        public float CurrentTime => Time.time;
-        public Action<float> OnTick { get; set; }
         public Action<IElfAdapter> OnHitElf { get; set; }
         public Action<IElfAdapter> OnExplode { get; set; } 
         public Action OnHitWall { get; set; }
         [SerializeField] private Rigidbody2D _rigidbody;
         [SerializeField] private Image _image;
+        [SerializeField] private Sprite _normalSprite;
+        [SerializeField] private Sprite _explosionSprite;
 
         public (float x, float y) Position => new (transform.position.x, transform.position.y);
+        WaitForSeconds _explosionDuration = new WaitForSeconds(0.25f);
 
         public void Move(float x, float y)
         {
@@ -27,12 +29,7 @@ namespace ExplodingElves.Engine
             _image.color = new Color(color.r, color.g, color.b, color.a);
         }
 
-        void FixedUpdate()
-        {
-            OnTick?.Invoke(Time.time);
-        }
-
-        void OnCollisionStay2D(Collision2D collision)
+        void OnCollisionEnter2D(Collision2D collision)
         {
             if (collision.gameObject.CompareTag("Elf"))
             {
@@ -47,6 +44,14 @@ namespace ExplodingElves.Engine
 
         public void Explode()
         {
+            StartCoroutine(ExplodeCoroutine());
+        }
+
+        private IEnumerator ExplodeCoroutine()
+        {
+            _image.sprite = _explosionSprite;
+            yield return _explosionDuration;
+            _image.sprite = _normalSprite;
             OnExplode?.Invoke(this);
         }
     }
