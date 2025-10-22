@@ -58,11 +58,6 @@ namespace ExplodingElves.Core
 
         private void ChangeState(ElfState state)
         {
-            if (_state == state)
-            {
-                return;
-            }
-
             _state = state;
             switch (_state)
             {

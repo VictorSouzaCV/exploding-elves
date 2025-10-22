@@ -53,6 +53,17 @@ Assets/
 
 - Uses Moq and NUnit in editor unit tests that mock adapters and make assertions to validate some of the core domain logic.
 
+## Memory Usage Report
+
+Build size: < 19mb
+
+Runtime memory: I've created 3 memory snapshots from my personal device (Redmi Note 8). 
+First one with a couple of seconds since app initialization (~204mb);
+Second one with 1 minute since app initialization (~267mb); 
+Third one with 5 minutes since app initialization (~388mb). 
+
+Although total managed memory drastically increases over time, Exploding Elves managed objects seem to have small influence on the increase. In fact, the main culpript seems to be in Native > Unity Subsystems > Unrooted. I saw other developers commenting that this is most likely related to a bug in the engine rather than bad memory usage by writter code.
+
 ## Challenges
 
 - **Breeding Stack Overflow**: in order to prevent infinite recursion during elves reprodution, some adaptations were made to limit the frequency of breeding:

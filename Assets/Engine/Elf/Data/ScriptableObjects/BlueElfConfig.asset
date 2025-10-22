@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0efe2f82bb360634bb9fe11502e8864d, type: 3}
   m_Name: BlueElfConfig
   m_EditorClassIdentifier: 
-  _color: {r: 0.20425417, g: 0.27050105, b: 0.8490566, a: 1}
+  _color: {r: 0.3726415, g: 0.4372784, b: 1, a: 1}
   _elfType: 3
   _spawnFrequency: 1
   _speed: 400
