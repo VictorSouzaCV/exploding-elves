@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace ExplodingElves.Core
 {
-    public class ElfHitController
+    public class ElfHitDomain
     {
         Dictionary<IElfAdapter, ElfDomain> _elves = new Dictionary<IElfAdapter, ElfDomain>();
         Dictionary<ElfType, ElfSpawnerDomain> _elfSpawnerByType = new Dictionary<ElfType, ElfSpawnerDomain>();
@@ -30,17 +30,20 @@ namespace ExplodingElves.Core
         {
             ElfDomain elfDomain;
             ElfDomain otherElfDomain;
-            try {
+            try
+            {
                 elfDomain = _elves[self];
                 otherElfDomain = _elves[other];
-            } catch (KeyNotFoundException) {
+            }
+            catch (KeyNotFoundException)
+            {
                 //Expected to happen when elves are exploding
                 return;
             }
             if (elfDomain.ElfType != otherElfDomain.ElfType && elfDomain.CanExplode && otherElfDomain.CanExplode)
             {
                 ExplodeElves(elfDomain, otherElfDomain, self, other);
-            } 
+            }
             else if (elfDomain.CanBreed && otherElfDomain.CanBreed)
             {
                 CreateElvesFamily(elfDomain, otherElfDomain, self, other);

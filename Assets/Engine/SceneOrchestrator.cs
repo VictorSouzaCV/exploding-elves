@@ -13,7 +13,7 @@ public class SceneOrchestrator : MonoBehaviour, IClockAdapter
 
     [SerializeField, SerializedDictionary] private SerializedDictionary<ElfType, SpawnerConfig> _elfSpawnerByType;
     List<IDisposable> _disposables = new List<IDisposable>();
-    ElfHitController _elfHitController = new ElfHitController();
+    ElfHitDomain _elfHitController = new ElfHitDomain();
 
     private void Start()
     {

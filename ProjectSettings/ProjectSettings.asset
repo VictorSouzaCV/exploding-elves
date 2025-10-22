@@ -582,7 +582,7 @@ PlayerSettings:
   m_BuildTargetNormalMapEncoding: []
   m_BuildTargetDefaultTextureCompressionFormat:
   - m_BuildTarget: Android
-    m_Format: 3
+    m_Format: 1
   - m_BuildTarget: WebGL
     m_Format: 0
   playModeTestRunnerEnabled: 0

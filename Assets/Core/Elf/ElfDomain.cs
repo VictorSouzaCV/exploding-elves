@@ -16,7 +16,7 @@ namespace ExplodingElves.Core
         private float _currentMovementX;
         private float _currentMovementY;
         private bool _isOldEnoughToBreed => _age >= _elfData.ReadyToBreedAge;
-        private bool _isTiredOfBreeding => _clockAdapter.CurrentTime - _lastBreedTime <= _elfData.BreedCooldown;
+        private bool _isTiredOfBreeding => _lastBreedTime == default ? false :_clockAdapter.CurrentTime - _lastBreedTime <= _elfData.BreedCooldown;
         private float _age => _bornTime == default ? 0 : _clockAdapter.CurrentTime - _bornTime;
         private float _bornTime;
         private float _lastBreedTime;

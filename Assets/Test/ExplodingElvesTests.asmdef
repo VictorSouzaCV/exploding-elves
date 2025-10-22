@@ -1,0 +1,21 @@
+{
+    "name": "ExplodingElvesTests",
+    "rootNamespace": "",
+    "references": [
+        "GUID:4365d395bb6343d48bbdbd943966840a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll",
+        "Moq.dll"
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
