@@ -31,34 +31,23 @@ Assets/
 
 ## Optimizations
 
-### Memory
-
 - **Object Pool**: ElfSpawnerBehaviour uses Unity's built-in ObjectPool system to reuse elf GameObjects
-
-### Physics
-
 - **Collision Matrix**: Elf x Elf / Elf x Wall
 - **Axis-Aligned Bounding Box Colliders**: colliders with rectangular shape with fixed rotation
 - **Fixed Update**: all events are bound to FixedUpdate. Besides, only one MonoBehaviour has the event method (SceneOrchestrator : IClockAdapter).
 - **Raycast Target**: the only Images with enabled raycasting are the Sliders that adjust the frequency of elves spawn.
-
-### Rendering
-
 - **Lighting**: disabled as all visuals are 2D with unlit native shaders
 - **Shadows**: disabled
 - **POT**: All sprites are POT (power of two resolution)
 - **Sprite Atlas**: global sprite atlas (512x512) to reduce draw calls
 - **Texture import settings**: sprites have reasonable max size and proper import flags
 
-### Architecture Benefits
-
-- **Domain Separation**: Core logic runs independently of Unity's update cycle, reducing MonoBehaviour overhead
 
 ## Editor Tool
 
 - **Selection History**: simple editor extension for quickly navigate between object selections
 
-## Tests
+## Unit Tests
 
 - Uses Moq and NUnit in editor unit tests that mock adapters and make assertions to validate some of the core domain logic.
 
