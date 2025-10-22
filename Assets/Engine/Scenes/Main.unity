@@ -465,12 +465,12 @@ PrefabInstance:
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -862
+      value: -734
       objectReference: {fileID: 0}
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 624
+      value: 618
       objectReference: {fileID: 0}
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
@@ -491,6 +491,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BlackElfSpawnerBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 5929676751104705630, guid: 90e3181d8f5e73a4691a370bf9c61702,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 98
       objectReference: {fileID: 0}
     - target: {fileID: 9143495082163022622, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
@@ -825,7 +830,7 @@ PrefabInstance:
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 872
+      value: 738
       objectReference: {fileID: 0}
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
@@ -851,6 +856,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: WhiteSpawnerBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 5929676751104705630, guid: 90e3181d8f5e73a4691a370bf9c61702,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 92
       objectReference: {fileID: 0}
     - target: {fileID: 9143495082163022622, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
@@ -1065,7 +1075,7 @@ PrefabInstance:
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -853
+      value: -719
       objectReference: {fileID: 0}
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
@@ -1091,6 +1101,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: RedElfSpawnerBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 5929676751104705630, guid: 90e3181d8f5e73a4691a370bf9c61702,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -112
       objectReference: {fileID: 0}
     - target: {fileID: 9143495082163022622, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
@@ -1241,7 +1256,7 @@ PrefabInstance:
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 859
+      value: 751
       objectReference: {fileID: 0}
     - target: {fileID: 4369187431341999798, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
@@ -1267,6 +1282,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BlueElfSpawnerBehaviour
+      objectReference: {fileID: 0}
+    - target: {fileID: 5929676751104705630, guid: 90e3181d8f5e73a4691a370bf9c61702,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -112
       objectReference: {fileID: 0}
     - target: {fileID: 9143495082163022622, guid: 90e3181d8f5e73a4691a370bf9c61702,
         type: 3}
