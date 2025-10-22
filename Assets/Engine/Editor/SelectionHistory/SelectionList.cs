@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace WM.Editor.SelectionHistory
+namespace ExplodingElves.Editor
 {
     public class SelectionList : List<Object>
     {

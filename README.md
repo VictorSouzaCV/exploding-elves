@@ -34,7 +34,7 @@ Assets/
 - **Object Pool**: ElfSpawnerBehaviour uses Unity's built-in ObjectPool system to reuse elf GameObjects
 - **Collision Matrix**: Elf x Elf / Elf x Wall
 - **Axis-Aligned Bounding Box Colliders**: colliders with rectangular shape with fixed rotation
-- **Fixed Update**: all events are bound to FixedUpdate. Besides, only one MonoBehaviour has the event method (SceneOrchestrator : IClockAdapter).
+- **Fixed Update**: all events are bound to FixedUpdate. Besides, only one MonoBehaviour has the event method (SceneOrchestrator : IClockAdapter). Could be easily further improved with coroutines and a smaller frequency.
 - **Raycast Target**: the only Images with enabled raycasting are the Sliders that adjust the frequency of elves spawn.
 - **Lighting**: disabled as all visuals are 2D with unlit native shaders
 - **Shadows**: disabled
@@ -45,7 +45,7 @@ Assets/
 
 ## Editor Tool
 
-- **Selection History**: simple editor extension for quickly navigate between object selections
+- **Selection History**: simple editor extension I've create previously for quickly navigate between object selections
 
 ## Unit Tests
 

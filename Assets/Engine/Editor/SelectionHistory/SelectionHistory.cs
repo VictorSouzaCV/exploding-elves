@@ -1,7 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 
-namespace WM.Editor.SelectionHistory
+namespace ExplodingElves.Editor
 {
     [InitializeOnLoad]
     static class SelectionHistory

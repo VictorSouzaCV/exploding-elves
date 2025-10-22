@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityToolbarExtender;
 
-namespace WM.Editor.SelectionHistory
+namespace ExplodingElves.Editor
 {
     [InitializeOnLoad]
     public class SelectionHistoryView

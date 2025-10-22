@@ -16,7 +16,7 @@ namespace ExplodingElves.Core
         private float _currentMovementX;
         private float _currentMovementY;
         private bool _isOldEnoughToBreed => _age >= _elfData.ReadyToBreedAge;
-        private bool _isTiredOfBreeding => _lastBreedTime == default ? false :_clockAdapter.CurrentTime - _lastBreedTime <= _elfData.BreedCooldown;
+        private bool _isTiredOfBreeding => _lastBreedTime == default ? false : _clockAdapter.CurrentTime - _lastBreedTime <= _elfData.BreedCooldown;
         private float _age => _bornTime == default ? 0 : _clockAdapter.CurrentTime - _bornTime;
         private float _bornTime;
         private float _lastBreedTime;
@@ -31,9 +31,8 @@ namespace ExplodingElves.Core
 
             _elfAdapter.SetColor(_elfData.Color);
             _currentAngleVariation = startAngularVariation;
-            
+
             ChangeState(ElfState.Minor);
-            SubscribeToAdapters();
         }
 
         public void BecomeParent()
@@ -43,7 +42,6 @@ namespace ExplodingElves.Core
 
         public void Explode()
         {
-            UnsubscribeFromAdapters();
             ChangeState(ElfState.Exploded);
         }
 
@@ -60,10 +58,16 @@ namespace ExplodingElves.Core
 
         private void ChangeState(ElfState state)
         {
+            if (_state == state)
+            {
+                return;
+            }
+
             _state = state;
             switch (_state)
             {
                 case ElfState.Minor:
+                    SubscribeToAdapters();
                     _bornTime = _clockAdapter.CurrentTime;
                     break;
                 case ElfState.ReadyToBreed:
@@ -75,6 +79,7 @@ namespace ExplodingElves.Core
                     _lastBreedTime = 0;
                     _bornTime = 0;
                     _elfAdapter.ChangeMovement(0, 0);
+                    UnsubscribeFromAdapters();
                     OnExplode?.Invoke(_elfAdapter);
                     break;
             }

@@ -5,7 +5,6 @@ namespace ExplodingElves.Core
     public class ElfSpawnerDomain : IDisposable
     {
         public Action<IElfAdapter, ElfDomain> OnElfSpawned { get; set; }
-        public Action<IElfAdapter> OnElfDespawned { get; set; }
         private readonly IElfSpawnerAdapter _elfSpawnerAdapter;
         private readonly IElfData _elfData;
         private readonly IElfAdapter _elfAdapter;
@@ -23,11 +22,11 @@ namespace ExplodingElves.Core
             _startAngularVariation = startAngularVariation;
             _elfSpawnerAdapter.SetColor(_elfData.Color);
 
-            _clockAdapter.OnTick += OnTick;
+            _clockAdapter.OnTick += OnUpdate;
             _elfSpawnerAdapter.OnSpawnFrequencyChanged += OnSpawnFrequencyChanged;
         }
 
-        private void OnTick(float time)
+        private void OnUpdate(float time)
         {
             if (_clockAdapter.CurrentTime - _lastSpawnTime >= 1f / _spawnFrequency)
             {
@@ -40,7 +39,6 @@ namespace ExplodingElves.Core
         {
             var elfAdapter = _elfSpawnerAdapter.Spawn(_elfAdapter);
             var elf = new ElfDomain(elfAdapter, _elfData, _clockAdapter, _startAngularVariation);
-            elf.OnExplode += OnElfDespawned;
             OnElfSpawned?.Invoke(elfAdapter, elf);
             return elf;
         }
@@ -59,7 +57,7 @@ namespace ExplodingElves.Core
 
         public void Dispose()
         {
-            _clockAdapter.OnTick -= OnTick;
+            _clockAdapter.OnTick -= OnUpdate;
             _elfSpawnerAdapter.OnSpawnFrequencyChanged -= OnSpawnFrequencyChanged;
         }
     }

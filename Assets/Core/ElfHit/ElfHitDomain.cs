@@ -40,6 +40,7 @@ namespace ExplodingElves.Core
                 //Expected to happen when elves are exploding
                 return;
             }
+            
             if (elfDomain.ElfType != otherElfDomain.ElfType && elfDomain.CanExplode && otherElfDomain.CanExplode)
             {
                 ExplodeElves(elfDomain, otherElfDomain, self, other);
